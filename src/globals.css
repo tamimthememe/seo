@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tailwind Custom Styles */
+@layer components {
+  .button-64 {
+    @apply flex items-center justify-center rounded-lg p-0.5 text-white cursor-pointer transition-all ease-in-out duration-300;
+    background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    font-family: "Phantomsans", sans-serif;
+    line-height: 1em;
+    min-width: 140px;
+    user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+  }
+
+  .button-64:active,
+  .button-64:hover {
+    outline: none;
+  }
+
+  .button-64 span {
+    @apply bg-gray-900 rounded-md w-full h-full transition duration-300;
+    padding: 16px 24px;
+  }
+
+  .button-64:hover span {
+    background: none;
+  }
+  
+  .dashboard-input{
+    @apply rounded-md focus:outline-none focus:border-[#6a4bff] focus:border px-2 py-3 pl-3;
+  }
+
+  .required:after {
+    content:" *";
+    color: red;
+  }
+
+  .select{
+    @apply  px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+     
+  }
+
+  @media (min-width: 768px) {
+    .button-64 {
+      @apply text-lg min-w-[196px];
+    }
+  }
+}
