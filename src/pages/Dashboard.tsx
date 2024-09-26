@@ -8,8 +8,8 @@ import {
   voices,
   models,
   imageStyles,
-  imageSizes
-} from "../assets/constants/constant.js";
+  imageSizes,
+} from "../assets/constants/constant.ts";
 
 const Dashboard = () => {
   const { userId }: Readonly<Params<string>> = useParams();
@@ -177,9 +177,7 @@ const Dashboard = () => {
               </select>
             </div>
             <div className="w-[10rem]">
-              <label className="block my-4 font-extralight">
-                Image Style
-              </label>
+              <label className="block my-4 font-extralight">Image Style</label>
               <select name="style" className="select">
                 {imageStyles.map((item) => (
                   <option value={item} className="font-light p-2">
@@ -189,9 +187,7 @@ const Dashboard = () => {
               </select>
             </div>
             <div className="w-[10rem]">
-              <label className="block my-4 font-extralight">
-                Image Size
-              </label>
+              <label className="block my-4 font-extralight">Image Size</label>
               <select name="imageSize" className="select">
                 {imageSizes.map((item) => (
                   <option value={item} className="font-light p-2">
@@ -201,26 +197,27 @@ const Dashboard = () => {
               </select>
             </div>
           </div>
-          
         </div>
         <div className="p-10 mx-auto w-[80%] rounded-lg">
-          <h1 className="text-2xl mb-21">SEO</h1>  
+          <h1 className="text-2xl mb-21">SEO</h1>
           <div className="flex w-full lg:w-[75%]  justify-between my-2 pl-2 flex-wrap">
-              <label className="required font-inter">Keywords to include in the text</label>
-              <p className="font-inter text-gray-500">5/80</p>
-            </div>
-            <div className="flex justify-between mb-6 flex-wrap max-lg:gap-6">
-              <input
-                type="text"
-                name="main keyword"
-                className="select lg:w-[75%]"
-                placeholder="Enter your main keyword"
-                required
-              />
-              <button className="dashboard-btn px-8 text-md text-[#6a4bff] border border-[#6a4bff] py-2 rounded-md bg-white">
-                Generate Keywords
-              </button>
-            </div>        
+            <label className="required font-inter">
+              Keywords to include in the text
+            </label>
+            <p className="font-inter text-gray-500">5/80</p>
+          </div>
+          <div className="flex justify-between mb-6 flex-wrap max-lg:gap-6">
+            <input
+              type="text"
+              name="main keyword"
+              className="select lg:w-[75%]"
+              placeholder="Enter your main keyword"
+              required
+            />
+            <button className="dashboard-btn px-8 text-md text-[#6a4bff] border border-[#6a4bff] py-2 rounded-md bg-white">
+              Generate Keywords
+            </button>
+          </div>
         </div>
       </form>
     </section>
