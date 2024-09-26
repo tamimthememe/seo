@@ -1,4 +1,4 @@
-import { Params, useParams } from "react-router-dom";
+
 import docsIcon from "../assets/images/docsIcon.png";
 import { useState } from "react";
 import {
@@ -12,8 +12,7 @@ import {
 } from "../assets/constants/constant.ts";
 
 const Dashboard = () => {
-  const { userId }: Readonly<Params<string>> = useParams();
-  console.log(userId);
+
 
   const [selectedItem, setSelectedItem] = useState("X-small");
 

@@ -73,9 +73,12 @@ const Login = () => {
               />
             </div>
 
-            <button className="w-full bg-teal-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-teal-400 transition duration-300">
+            <Link
+              to="/dashboard/dsijdsidj"
+              className="w-full bg-teal-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-teal-400 transition duration-300"
+            >
               Log In
-            </button>
+            </Link>
           </form>
 
           {/* Forgot Password and Sign Up */}
