@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
-const Navbar = () => {
+type Props = {
+  mode: string;
+};
+
+const Navbar = ({ mode }: Props) => {
   const [navOpen, setNavOpen] = useState(false);
 
   const toggleNav = () => {
@@ -25,26 +29,35 @@ const Navbar = () => {
         </div>
 
         {/* Links - Hidden on smaller screens */}
-        <div className="hidden md:flex space-x-6 items-center">
+        {mode == "logged" ? (
           <Link
-            to="#how-it-works"
-            className="hover:text-teal-300 transition duration-300"
-          >
-            How It Works
-          </Link>
-          <Link
-            to="/sign-in"
-            className="hover:text-teal-300 transition duration-300"
-          >
-            Login
-          </Link>
-          <Link
-            to="/sign-up"
+            to="/"
             className="bg-teal-500 hover:bg-teal-400 text-white py-2 px-6 rounded-full transition duration-300"
           >
-            Get Started - It’s Free
+            Log Out
           </Link>
-        </div>
+        ) : (
+          <div className="hidden md:flex space-x-6 items-center">
+            <Link
+              to="#how-it-works"
+              className="hover:text-teal-300 transition duration-300"
+            >
+              How It Works
+            </Link>
+            <Link
+              to="/sign-in"
+              className="hover:text-teal-300 transition duration-300"
+            >
+              Login
+            </Link>
+            <Link
+              to="/sign-up"
+              className="bg-teal-500 hover:bg-teal-400 text-white py-2 px-6 rounded-full transition duration-300"
+            >
+              Get Started - It’s Free
+            </Link>
+          </div>
+        )}
 
         {/* Mobile Menu Icon */}
         <div className="md:hidden">

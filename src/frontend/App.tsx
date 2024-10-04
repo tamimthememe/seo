@@ -6,15 +6,17 @@ import Navbar from "./components/Shared/Navbar";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Blog from "./pages/createBlog/Blog";
 
 const App = () => {
   return (
     <Router>
-      <Navbar />
+      
       <Routes>
         <Route path="/sign-up" element={<Signup />} />
         <Route path="/sign-in" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/:userId" element={<Dashboard />} />
+        <Route path="/blog/:userId" element={<Blog />} />
         <Route path="/" element={<Home />} />
       </Routes>
       <Footer />
