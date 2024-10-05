@@ -1,15 +1,21 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
-import { userModel } from "./src/backend/models/userModel.js";
-import { createUser } from "./src/backend/Route Handlers/register.js";
-import {
+const mongoose = require("mongoose");
+const cors = require("cors");
+const express = require("express");
+const dotenv = require("dotenv");
+
+// Model
+const { userModel } = require("./models/userModel.js");
+
+// Route Handlers
+const { createUser } = require("./Route Handlers/register.js");
+
+// GPT Handlers
+const {
   createBlog,
   generateAIKeywords,
   generateAITitle,
   generateImages,
-} from "./src/backend/gpt/gpt.js";
+} = require("./gpt/gpt.js");
 
 dotenv.config();
 
@@ -19,13 +25,11 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
-// Define a simple route
 app.get("/", (req, res) => {
   res.send("API is running");
 });

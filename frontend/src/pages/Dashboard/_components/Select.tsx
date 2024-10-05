@@ -1,3 +1,5 @@
+import React from "react";
+
 type Props = {
   options: { name: string; value: string; labelColor?: string }[];
   name: string;

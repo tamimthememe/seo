@@ -1,3 +1,4 @@
+import React from "react";
 import docsIcon from "../assets/images/docsIcon.png";
 import { useState } from "react";
 import {
@@ -97,13 +98,13 @@ const Dashboard = () => {
   return (
     <>
       <Navbar mode="logged" />
-      <section className="p-10 font-inter">
+      <section className="md:p-10 font-inter">
         {loading ? (
           <LoadingSpinner />
         ) : (
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="bg-blue-50 w-[80%] mx-auto p-10 rounded-md">
-              <div className="flex items-center justify-between flex-wrap">
+              <div className="flex items-center justify-between flex-wrap gap-6">
                 <div className="flex items-center gap-6 flex-wrap">
                   <div className="bg-red-400 rounded-md p-2 ">
                     <img src={docsIcon} alt="Page Icon" width="60" />
@@ -117,7 +118,7 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
-                <button className="px-12 py-3 bg-purple-600 text-white text-xl font-inter rounded-lg">
+                <button className="px-12 py-3 gap-10 bg-purple-600 text-white text-xl font-inter rounded-lg">
                   Run
                 </button>
               </div>

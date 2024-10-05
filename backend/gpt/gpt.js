@@ -1,6 +1,6 @@
-import OpenAI from "openai";
+const OpenAI = require("openai");
 
-export const generateAITitle = async (req, res) => {
+const generateAITitle = async (req, res) => {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
 
   const { prompt } = req.body;
@@ -19,7 +19,7 @@ export const generateAITitle = async (req, res) => {
   return res.json(completion.choices[0].message.content);
 };
 
-export const generateAIKeywords = async (req, res) => {
+const generateAIKeywords = async (req, res) => {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
 
   const { prompt } = req.body;
@@ -38,7 +38,7 @@ export const generateAIKeywords = async (req, res) => {
   return res.json(completion.choices[0].message.content);
 };
 
-export const createBlog = async (req, res) => {
+const createBlog = async (req, res) => {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
 
   const { blogData } = req.body;
@@ -151,7 +151,7 @@ export const createBlog = async (req, res) => {
   return res.json(completion.choices[0].message.content);
 };
 
-export const generateImages = async (req, res) => {
+const generateImages = async (req, res) => {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
 
   const { blogData } = req.body;
@@ -164,4 +164,11 @@ export const generateImages = async (req, res) => {
   });
 
   return res.json(response);
+};
+
+module.exports = {
+  generateAITitle,
+  generateAIKeywords,
+  createBlog,
+  generateImages,
 };

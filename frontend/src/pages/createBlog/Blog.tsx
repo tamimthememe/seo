@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import docsIcon from "../../assets/images/docsIcon.png";
-import { Headers } from "openai/_shims/index.mjs";
 import { useLocation } from "react-router-dom";
 import Navbar from "../../components/Shared/Navbar";
 
