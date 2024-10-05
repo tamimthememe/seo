@@ -107,8 +107,8 @@ const Blog = (props: Props) => {
   return (
     <>
       <Navbar mode="logged" />
-      <section className="lg:mx-52 md:mx-20 font-inter">
-        <div className="flex justify-between items-center border my-10 p-5">
+      <section className="lg:mx-52 md:mx-20 mx-5 font-inter">
+        <div className="flex flex-wrap gap-5 justify-between items-center border my-10 p-5">
           <div className="bg-red-400 rounded-md p-2 ">
             <img src={docsIcon} alt="Page Icon" width="30" />
           </div>

@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5176/login", { email, password })
+      .post(`${import.meta.env.VITE_BACKEND_URL}/login`, { email, password })
       .then((result) => {
         if (result.data.data === "success") {
           const id = result.data.user._id;

@@ -3,7 +3,6 @@ import { FaGoogle } from "react-icons/fa";
 import bg from "../assets/signup_bg.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { v4 as uuidv4, v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Shared/Navbar";
 
@@ -18,7 +17,7 @@ const Signup = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5176/register", {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/register`, {
         name,
         email,
         password,
@@ -34,7 +33,7 @@ const Signup = () => {
 
   return (
     <>
-      <Navbar  mode="home"  />
+      <Navbar mode="home" />
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Left Side - Image and Description */}
         <div className="md:w-1/2 bg-gradient-to-r from-gray-800 via-gray-900 to-black flex items-center justify-center text-center p-12 text-white">

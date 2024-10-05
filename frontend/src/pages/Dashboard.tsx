@@ -36,8 +36,11 @@ const Dashboard = () => {
   const { userId } = useParams();
 
   const generateTitle = async () => {
+    console.log(import.meta.env.VITE_BACKEND_URL);
     axios
-      .post("http://localhost:5176/chat/title", { prompt: keyword })
+      .post(`${import.meta.env.VITE_BACKEND_URL}/chat/title`, {
+        prompt: keyword,
+      })
       .then((res) => {
         const data = res.data.replace(/['"]+/g, "");
         setTitle(data);
@@ -46,7 +49,7 @@ const Dashboard = () => {
 
   const generateKeywords = () => {
     axios
-      .post("http://localhost:5176/chat/keywords", { prompt: title })
+      .post(`${import.meta.env.VITE_BACKEND_URL}/chat/keywords`, { prompt: title })
       .then((res) => {
         setSeo(res.data);
       });
