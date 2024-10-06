@@ -49,7 +49,9 @@ const Dashboard = () => {
 
   const generateKeywords = () => {
     axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/chat/keywords`, { prompt: title })
+      .post(`${import.meta.env.VITE_BACKEND_URL}/chat/keywords`, {
+        prompt: title,
+      })
       .then((res) => {
         setSeo(res.data);
       });
@@ -76,10 +78,12 @@ const Dashboard = () => {
     setLoading(true);
     if (blogData.images == "Yes") {
       axios
-        .post("http://localhost:5176/chat/create", { blogData })
+        .post(`${import.meta.env.VITE_BACKEND_URL}/chat/create`, { blogData })
         .then((res) => {
           axios
-            .post("http://localhost:5176/chat/image", { blogData })
+            .post(`${import.meta.env.VITE_BACKEND_URL}/chat/image`, {
+              blogData,
+            })
             .then((response) => {
               navigate(`/blog/${userId}`, {
                 state: { blogdata: res.data, images: response.data },
@@ -89,7 +93,7 @@ const Dashboard = () => {
         .catch((err) => console.log(err));
     } else {
       axios
-        .post("http://localhost:5176/chat/create", { blogData })
+        .post(`${import.meta.env.VITE_BACKEND_URL}chat/create`, { blogData })
         .then((res) => {
           navigate(`/blog/${userId}`, {
             state: { blogdata: res.data, images: [] },
