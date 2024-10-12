@@ -10,5 +10,60 @@ const createUser = async (req, res) => {
   }
 };
 
+const updateSub = async (req, res) => {
+  const userId = req.body.userId;
+  const subscriptionId = req.body.subscriptionId;
+  const plan = req.body.subscription;
+  const generations = req.body.generations;
+
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      {
+        subscriptionId: subscriptionId,
+        subscription: plan,
+        generations: generations,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating user", error });
+  }
+};
+
+const updateGen = async (req, res) => {
+  const userId = req.body.userId;
+  const generations = req.body.generations;
+
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      {
+        generations: generations,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating user", error });
+  }
+};
 // Correct way to export the function
-module.exports = { createUser };
+module.exports = { createUser, updateSub, updateGen };

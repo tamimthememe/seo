@@ -22,6 +22,7 @@ const Signup = () => {
         email,
         password,
         subscription: "none",
+        generations: 5,
       })
       .then((result) => {
         navigate("/login");

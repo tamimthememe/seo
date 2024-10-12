@@ -1,7 +1,32 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../providers/userProvider";
+import { SubscriptionContext } from "../../providers/subscriptionProvider";
 
 const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState("yearly"); // State for billing cycle
+  const navigate = useNavigate();
+
+  const { userId, isLoggedIn } = useContext(UserContext);
+  const { subscriptionId, plan, updatePlan, updateSubscriptionId } =
+    useContext(SubscriptionContext);
+
+  const handleClick = async (name: string) => {
+    if (!isLoggedIn) {
+      navigate("/sign-in");
+    } else {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/payment/createSubscription`,
+        { name: name, billing: billingCycle, userId: userId }
+      );
+
+      updatePlan(name);
+      updateSubscriptionId(response.data.id);
+      console.log(subscriptionId);
+      window.open(response.data.links[0].href, "_blank");
+    }
+  };
 
   const plans = [
     {
@@ -112,6 +137,7 @@ const Pricing = () => {
 
               <button
                 className={`${plan.buttonStyle} py-3 px-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
+                onClick={() => handleClick(plan.name)}
               >
                 {plan.buttonLabel}
               </button>

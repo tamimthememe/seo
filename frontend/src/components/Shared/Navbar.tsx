@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "../../providers/userProvider";
 
 type Props = {
   mode: string;
@@ -8,6 +9,7 @@ type Props = {
 
 const Navbar = ({ mode }: Props) => {
   const [navOpen, setNavOpen] = useState(false);
+  const { userId, updateUserId, isLoggedIn } = useContext(UserContext);
 
   const toggleNav = () => {
     setNavOpen(!navOpen);
@@ -31,6 +33,9 @@ const Navbar = ({ mode }: Props) => {
         {/* Links - Hidden on smaller screens */}
         {mode == "logged" ? (
           <Link
+            onClick={() => {
+              updateUserId("");
+            }}
             to="/"
             className="bg-teal-500 hover:bg-teal-400 text-white py-2 px-6 rounded-full transition duration-300"
           >
@@ -51,7 +56,7 @@ const Navbar = ({ mode }: Props) => {
               Login
             </Link>
             <Link
-              to="/sign-up"
+              to={userId ? `/dashboard/${userId}` : "/sign-up"}
               className="bg-teal-500 hover:bg-teal-400 text-white py-2 px-6 rounded-full transition duration-300"
             >
               Get Started - It’s Free

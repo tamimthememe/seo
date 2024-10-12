@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import docsIcon from "../assets/images/docsIcon.png";
 import { useState } from "react";
 import {
@@ -17,8 +17,12 @@ import Select from "./Dashboard/_components/Select";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "./Dashboard/_components/Loading";
 import Navbar from "../components/Shared/Navbar";
+import { UserContext } from "../providers/userProvider";
+import { SubscriptionContext } from "../providers/subscriptionProvider";
+import CheckApprovalLoader from "./Dashboard/_components/checkApprovalLoader";
 
 const Dashboard = () => {
+  const { userId, updateUserId, isLoggedIn } = useContext(UserContext);
   const [keyword, setKeyword] = useState("");
   const [title, setTitle] = useState("");
   const [language, setLanguage] = useState("english-us");
@@ -32,11 +36,15 @@ const Dashboard = () => {
   const [style, setStyle] = useState("None");
   const [seo, setSeo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkApproval, setCheckApproval] = useState(false);
+  const [payment, setPayment] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+  const [generations, setGenerations] = useState(0);
 
-  const { userId } = useParams();
+  const { subscriptionId, plan, updatePlan, updateSubscriptionId } =
+    useContext(SubscriptionContext);
 
   const generateTitle = async () => {
-    console.log(import.meta.env.VITE_BACKEND_URL);
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/chat/title`, {
         prompt: keyword,
@@ -57,10 +65,100 @@ const Dashboard = () => {
       });
   };
 
+  const checkApprovalButtonHandler = async () => {
+    const checkApproval = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/payment/getSubscriptionApproval`,
+      { subId: subscriptionId }
+    );
+
+    //@ts-ignore
+    if (checkApproval.data != "APPROVAL_PENDING") {
+      setCheckApproval(false);
+    } else {
+      alert("Not Approved");
+    }
+  };
+
+  useEffect(() => {
+    const updateSubs = async () => {
+      try {
+        console.log("IDHAR");
+        if (localStorage.getItem("subscriptionId")) {
+          console.log("idhar ni");
+          const checkApproval = await axios.post(
+            `${
+              import.meta.env.VITE_BACKEND_URL
+            }/payment/getSubscriptionApproval`,
+            { subId: subscriptionId }
+          );
+
+          //@ts-ignore
+          if (checkApproval === "APPROVAL_PENDING") {
+            setCheckApproval(true);
+            console.log("Awaiting Approval");
+          } else if (!checkApproval) {
+            console.log("PLEASE PAY");
+          } else {
+            setCheckApproval(false);
+            let generations;
+            if (plan === "Starter") {
+              generations = 50;
+            } else if (plan === "Professional") {
+              generations = 250;
+            }
+            const res = await axios.put(
+              `${import.meta.env.VITE_BACKEND_URL}/updateSub`,
+              {
+                subscriptionId: subscriptionId,
+                subscription: plan,
+                userId: userId,
+                generations: generations,
+              }
+            );
+          }
+
+          localStorage.removeItem("subscriptionId");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (subscriptionId) {
+      const response = updateSubs();
+
+      console.log(response);
+    }
+  }, [checkApproval, subscriptionId]);
+
+  useEffect(() => {
+    const getDetails = async () => {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+        userId: userId,
+      });
+
+      setUserDetails(res.data);
+      if (!userDetails) {
+        navigate("/sign-in");
+      }
+
+      if (res.data.generations <= 0) {
+        setPayment(true);
+      }
+      setGenerations(res.data.generations);
+    };
+
+    getDetails();
+  }, [userId]);
+
   const navigate = useNavigate();
+  const checkPayment = () => {
+    navigate("/");
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
     const blogData = {
       title,
       language,
@@ -75,40 +173,72 @@ const Dashboard = () => {
       seo,
     };
 
-    setLoading(true);
-    if (blogData.images == "Yes") {
-      axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/chat/create`, { blogData })
-        .then((res) => {
-          axios
-            .post(`${import.meta.env.VITE_BACKEND_URL}/chat/image`, {
-              blogData,
-            })
-            .then((response) => {
-              navigate(`/blog/${userId}`, {
-                state: { blogdata: res.data, images: response.data },
-              });
-            });
-        })
-        .catch((err) => console.log(err));
+    if (generations <= 0) {
+      setCheckApproval(true);
     } else {
+      setLoading(true);
       axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}chat/create`, { blogData })
-        .then((res) => {
-          navigate(`/blog/${userId}`, {
-            state: { blogdata: res.data, images: [] },
+        .put(`${import.meta.env.VITE_BACKEND_URL}/updateGen`, {
+          userId,
+          generations: generations - 1,
+        })
+        .then((res) => console.log(res.data));
+
+        if (blogData.images == "Yes") {
+        axios
+          .post(`${import.meta.env.VITE_BACKEND_URL}/chat/create`, { blogData })
+          .then((res) => {
+            axios
+              .post(`${import.meta.env.VITE_BACKEND_URL}/chat/image`, {
+                blogData,
+              })
+              .then((response) => {
+                navigate(`/blog/${userId}`, {
+                  state: { blogdata: res.data, images: response.data },
+                });
+              });
+          })
+          .catch((err) => console.log(err));
+      } else {
+        axios
+          .post(`${import.meta.env.VITE_BACKEND_URL}/chat/create`, { blogData })
+          .then((res) => {
+            navigate(`/blog/${userId}`, {
+              state: { blogdata: res.data, images: [] },
+            });
           });
-        });
+      }
     }
   };
 
-  return (
-    <>
-      <Navbar mode="logged" />
-      <section className="md:p-10 font-inter">
-        {loading ? (
-          <LoadingSpinner />
-        ) : (
+  const renderComps = () => {
+    if (loading) {
+      return <LoadingSpinner />;
+    } else if (checkApproval) {
+      return (
+        <CheckApprovalLoader
+          handleClick={checkApprovalButtonHandler}
+          text="Awaiting Approval"
+          cta="check Approval"
+        />
+      );
+    } else if (payment) {
+      return (
+        <CheckApprovalLoader
+          handleClick={checkPayment}
+          text="Pay to continue"
+          cta="Pay from here"
+        />
+      );
+    } else {
+      return (
+        <>
+          <h1 className="my-5 ml-10">Your Plan: {plan ? plan : "Free"}</h1>
+          <h1 className="my-5 ml-10">
+            Generations Left:
+            {/*@ts-ignore*/}
+            {userDetails.generations && userDetails.generations}
+          </h1>
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="bg-blue-50 w-[80%] mx-auto p-10 rounded-md">
               <div className="flex items-center justify-between flex-wrap gap-6">
@@ -327,8 +457,14 @@ const Dashboard = () => {
               </div>
             </div>
           </form>
-        )}
-      </section>
+        </>
+      );
+    }
+  };
+  return (
+    <>
+      <Navbar mode="logged" />
+      <section className="md:p-10 font-inter">{renderComps()}</section>
     </>
   );
 };

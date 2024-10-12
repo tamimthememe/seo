@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import bg from "../assets/signup_bg.svg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Shared/Navbar";
+import { UserContext } from "../providers/userProvider";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  //@ts-ignore
+  const { updateUserId } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -18,6 +21,7 @@ const Login = () => {
       .then((result) => {
         if (result.data.data === "success") {
           const id = result.data.user._id;
+          updateUserId(id);
           navigate(`/dashboard/${id}`);
         } else if (result.data === "Sorry the password is incorrect") {
           alert("Sorry the password is incorrect");
@@ -31,7 +35,7 @@ const Login = () => {
 
   return (
     <>
-      <Navbar  mode="home"  />
+      <Navbar mode="home" />
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Left Side - Image and Description */}
         <div className="md:w-1/2 bg-gradient-to-r from-gray-800 via-gray-900 to-black flex items-center justify-center text-center p-12 text-white">

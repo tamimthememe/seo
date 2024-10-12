@@ -7,20 +7,25 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/createBlog/Blog";
+import UserProvider from "./providers/userProvider";
+import { SubscriptionProvider } from "./providers/subscriptionProvider";
 
 const App = () => {
   return (
-    <Router>
-      
-      <Routes>
-        <Route path="/sign-up" element={<Signup />} />
-        <Route path="/sign-in" element={<Login />} />
-        <Route path="/dashboard/:userId" element={<Dashboard />} />
-        <Route path="/blog/:userId" element={<Blog />} />
-        <Route path="/" element={<Home />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <SubscriptionProvider>
+      <UserProvider>
+        <Router>
+          <Routes>
+            <Route path="/sign-up" element={<Signup />} />
+            <Route path="/sign-in" element={<Login />} />
+            <Route path="/dashboard/:userId" element={<Dashboard />} />
+            <Route path="/blog/:userId" element={<Blog />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </UserProvider>
+    </SubscriptionProvider>
   );
 };
 

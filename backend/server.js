@@ -3,11 +3,19 @@ const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
 
+dotenv.config();
+
 // Model
 const { userModel } = require("./models/userModel.js");
 
 // Route Handlers
-const { createUser } = require("./Route Handlers/register.js");
+const {
+  createUser,
+  updateSub,
+  updateGen,
+} = require("./Route Handlers/register.js");
+
+const paypal = require("./Route Handlers/paypal.js");
 
 // GPT Handlers
 const {
@@ -52,6 +60,10 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/user", async (req, res) => {
+  const response = await userModel.findOne({ _id: req.body.userId });
+  return res.send(response);
+});
 app.get("/login", (req, res) => {
   const { email } = req.params;
 
@@ -63,10 +75,19 @@ app.get("/login", (req, res) => {
   }
 });
 
+app.put("/updateSub", async (req, res) => updateSub(req, res));
+app.put("/updateGen", async (req, res) => updateGen(req, res));
 app.post("/chat/title", (req, res) => generateAITitle(req, res));
 app.post("/chat/keywords", (req, res) => generateAIKeywords(req, res));
 app.post("/chat/create", (req, res) => createBlog(req, res));
 app.post("/chat/image", (req, res) => generateImages(req, res));
+
+app.post("/payment/createSubscription", (req, res) =>
+  paypal.createSubscription(req, res)
+);
+app.post("/payment/getSubscriptionApproval", (req, res) =>
+  paypal.getSubscriptionApproval(req, res)
+);
 
 // Start the server
 app.listen(PORT, () => {
